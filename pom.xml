@@ -21,12 +21,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>io.etcd</groupId>
+    <groupId>com.github.mxsm</groupId>
     <artifactId>jetcd-parent</artifactId>
-    <version>0.3.0-SNAPSHOT</version>
+    <version>0.3.6</version>
     <name>jetcd</name>
     <description>Java Client for etcd V3</description>
-    <url>https://github.com/etcd-io/jetcd</url>
+    <url>https://github.com/mxsm/jetcd</url>
     <packaging>pom</packaging>
 
     <licenses>
@@ -38,35 +38,15 @@
 
     <developers>
         <developer>
-            <name>Fanmin Shi</name>
-            <email>fanmin.shi@coreos.com</email>
-            <organization>coreos</organization>
-            <organizationUrl>http://coreos.com/</organizationUrl>
-        </developer>
-        <developer>
-            <name>Luca Burgazzoli</name>
-            <email>lburgazzoli@gmail.com</email>
-            <organization>redhat</organization>
-            <organizationUrl>http://redhat.com/</organizationUrl>
-        </developer>
-        <developer>
-            <name>Xiang Li</name>
-            <email>xiang.li@coreos.com</email>
-            <organization>coreos</organization>
-            <organizationUrl>http://coreos.com/</organizationUrl>
-        </developer>
-        <developer>
-            <name>Anthony Romano</name>
-            <email>anthony.romano@coreos.com</email>
-            <organization>coreos</organization>
-            <organizationUrl>http://coreos.com/</organizationUrl>
+            <name>mxsm</name>
+            <email>ljbmxsm@gmail.com</email>
         </developer>
     </developers>
 
     <scm>
-        <connection>scm:git:https://github.com/etcd-io/jetcd.git</connection>
-        <developerConnection>scm:git:https://github.com/etcd-io/jetcd.git</developerConnection>
-        <url>https://github.com/etcd-io/jetcd.git</url>
+        <connection>scm:git:https://github.com/mxsm/jetcd.git</connection>
+        <developerConnection>scm:git:https://github.com/mxsm/jetcd.git</developerConnection>
+        <url>https://github.com/mxsm/jetcd.git</url>
     </scm>
 
     <properties>
@@ -80,7 +60,7 @@
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
         <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
-        <maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
+        <maven-javadoc-plugin.version>2.9.1</maven-javadoc-plugin.version>
         <maven-bundle-plugin.version>4.0.0</maven-bundle-plugin.version>
         <maven-checkstyle-plugin.version>3.0.0</maven-checkstyle-plugin.version>
         <maven-shade-plugin.version>3.2.0</maven-shade-plugin.version>
@@ -132,13 +112,13 @@
         <module>jetcd-launcher</module>
         <module>jetcd-launcher-maven-plugin</module>
         <module>jetcd-common</module>
-        <module>jetcd-launcher-maven-plugin-test</module>
+        <!-- <module>jetcd-launcher-maven-plugin-test</module> -->
         <module>jetcd-resolver</module>
         <module>jetcd-resolver-dns-srv</module>
         <module>jetcd-core</module>
         <module>jetcd-all</module>
         <module>jetcd-osgi</module>
-        <module>jetcd-examples</module>
+        <!-- <module>jetcd-examples</module> -->
     </modules>
 
     <dependencyManagement>
@@ -513,6 +493,9 @@
                             <goals>
                                 <goal>jar</goal>
                             </goals>
+                            <configuration>
+								<additionalparam>-Xdoclint:none</additionalparam>
+							</configuration>
                         </execution>
                     </executions>
                 </plugin>
@@ -556,41 +539,6 @@
                     <artifactId>maven-bundle-plugin</artifactId>
                     <version>${maven-bundle-plugin.version}</version>
                     <extensions>true</extensions>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>${maven-checkstyle-plugin.version}</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>com.puppycrawl.tools</groupId>
-                            <artifactId>checkstyle</artifactId>
-                            <version>${com-puppycrawl-tools.version}</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>com.google.guava</groupId>
-                            <artifactId>guava</artifactId>
-                            <version>${com-puppycrawl-tools-guava.version}</version>
-                        </dependency>
-                    </dependencies>
-                    <executions>
-                        <execution>
-                            <id>validate</id>
-                            <phase>validate</phase>
-                            <goals>
-                                <goal>check</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <encoding>UTF-8</encoding>
-                        <consoleOutput>true</consoleOutput>
-                        <failsOnError>true</failsOnError>
-                        <failOnViolation>true</failOnViolation>
-                        <violationSeverity>warning</violationSeverity>
-                        <linkXRef>false</linkXRef>
-                    </configuration>
                 </plugin>
 
                 <plugin>
@@ -686,42 +634,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <plugin>
-                <groupId>com.mycila</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <version>${license-maven-plugin.version}</version>
-                <configuration>
-                    <header>${jetcd.project.root}/etc/license.txt</header>
-                    <excludes>
-                        <exclude>**/ErrorCode.java</exclude>
-                        <exclude>LICENSE</exclude>
-                        <exclude>MAINTAINERS</exclude>
-                        <exclude>CONTRIBUTING.md</exclude>
-                        <exclude>README.md</exclude>
-                        <exclude>NOTICE</exclude>
-                        <exclude>DCO</exclude>
-                        <exclude>docs/**</exclude>
-                        <exclude>.mvn/wrapper/**</exclude>
-                        <exclude>mvnw*</exclude>
-                        <exclude>etc/license.txt</exclude>
-                        <exclude>etc/checkstyle-header-java.txt</exclude>
-                        <exclude>src/test/resources/ssl/**</exclude>
-                        <exclude>external/**</exclude>
-                        <exclude>target-ide/**</exclude>
-                    </excludes>
-                    <mapping>
-                        <proto>DOUBLESLASH_STYLE</proto>
-                    </mapping>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 
@@ -802,6 +714,9 @@
                                 <goals>
                                     <goal>jar</goal>
                                 </goals>
+                                <configuration>
+									<additionalparam>-Xdoclint:none</additionalparam>
+								</configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -818,17 +733,6 @@
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>${nexus-staging-maven-plugin.version}</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>
@@ -850,11 +754,11 @@
 
     <distributionManagement>
         <snapshotRepository>
-            <id>ossrh</id>
+            <id>oss</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
-            <id>ossrh</id>
+            <id>oss</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>

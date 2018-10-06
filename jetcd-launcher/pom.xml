@@ -22,9 +22,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>io.etcd</groupId>
+        <groupId>com.github.mxsm</groupId>
         <artifactId>jetcd-parent</artifactId>
-        <version>0.3.0-SNAPSHOT</version>
+        <version>0.3.6</version>
     </parent>
 
     <artifactId>jetcd-launcher</artifactId>
@@ -46,8 +46,6 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <!-- EtcdClusterResource is in src/main, but everyone depending on this launcher should be
-                 forced to transitively inherit a JUnit dependency; it's optional - if they already have it anyway. -->
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>

@@ -21,9 +21,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
-        <groupId>io.etcd</groupId>
+        <groupId>com.github.mxsm</groupId>
         <artifactId>jetcd-parent</artifactId>
-        <version>0.3.0-SNAPSHOT</version>
+        <version>0.3.6</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -32,20 +32,28 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.etcd</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>jetcd-common</artifactId>
+             <scope>compile</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>io.etcd</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>jetcd-core</artifactId>
+            <scope>compile</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>io.etcd</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>jetcd-resolver</artifactId>
+            <scope>compile</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>io.etcd</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>jetcd-resolver-dns-srv</artifactId>
+            <scope>compile</scope>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 
@@ -62,44 +70,24 @@
                         </goals>
                         <configuration>
                             <createSourcesJar>true</createSourcesJar>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <shadedArtifactAttached>false</shadedArtifactAttached>
-                            <minimizeJar>false</minimizeJar>
+                            <promoteTransitiveDependencies>false</promoteTransitiveDependencies>
                             <artifactSet>
-                                <excludes>
-                                    <exclude>org.slf4j:slf4j-api</exclude>
-                                    <exclude>com.google.errorprone:error_prone_annotations</exclude>
-                                </excludes>
+                            	<includes>
+                            		<include>com.github.mxsm:jetcd-common</include>
+                            		<include>com.github.mxsm:jetcd-core</include>
+                            		<include>com.github.mxsm:jetcd-resolver</include>
+                            		<include>com.github.mxsm:jetcd-resolver-dns-srv</include>
+                            	</includes>
                             </artifactSet>
-                            <relocations>
-                                <relocation>
-                                    <pattern>com.google</pattern>
-                                    <shadedPattern>io.etcd.jetcd.shaded.com.google
-                                    </shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>io.grpc</pattern>
-                                    <shadedPattern>io.etcd.jetcd.shaded.io.grpc</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>io.netty</pattern>
-                                    <shadedPattern>io.etcd.jetcd.shaded.io.netty</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>javax.annotation</pattern>
-                                    <shadedPattern>io.etcd.jetcd.shaded.javax.annotation</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>io.opencensus</pattern>
-                                    <shadedPattern>io.etcd.jetcd.shaded.io.opencensus
-                                    </shadedPattern>
-                                </relocation>
-                            </relocations>
+                            
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
@@ -110,28 +98,7 @@
                         <Bundle-Name>etcd :: ${project.artifactId}</Bundle-Name>
                         <Bundle-Version>${project.version}</Bundle-Version>
                         <!-- The (shaded) protobuf has to also be exported because it's part of the public API surface of ByteSequence's getByteString() method; see https://github.com/etcd-io/jetcd/issues/393 -->
-                        <Export-Package>
-                            io.etcd.jetcd.common.exception,
-                            io.etcd.jetcd.resolver,
-                            io.etcd.jetcd.resolver.dnssrv,
-                            io.etcd.jetcd,
-                            io.etcd.jetcd.auth,
-                            io.etcd.jetcd.cluster,
-                            io.etcd.jetcd.data,
-                            io.etcd.jetcd.kv,
-                            io.etcd.jetcd.lease,
-                            io.etcd.jetcd.lock,
-                            io.etcd.jetcd.maintenance,
-                            io.etcd.jetcd.op,
-                            io.etcd.jetcd.options,
-                            io.etcd.jetcd.watch,
-                            io.etcd.jetcd.shaded.com.google.protobuf
-                        </Export-Package>
-                        <Import-Package>
-                            org.slf4j;version="[1.7,2)",
-                            javax.security.cert,
-                            javax.net.ssl;resolution:=optional
-                        </Import-Package>
+                        <Export-Package>io.etcd.jetcd.*;-noimport:=true</Export-Package>
                     </instructions>
                     <unpackBundle>true</unpackBundle>
                 </configuration>
